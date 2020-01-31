@@ -16,6 +16,8 @@ class App extends Component {
       printType: '',
       bookType: ''
     };
+    this.createURL = this.createURL.bind(this)
+    this.bookFind = this.bookFind.bind(this)
   }
 
   setSearchInput = (input) => {
@@ -24,14 +26,16 @@ class App extends Component {
     });
   };
 
-  createURL = (search, printFilter, bookFilter) => {
+  createURL(search, printFilter, bookFilter) {
     const address = 'https://www.googleapis.com/books/v1/volumes?';
     const url = `${address}q=${search}&filter=${bookFilter || 'ebooks'}&printType=${printFilter || 'all'}`;
     console.log(url);
     return url;
   };
 
-  componentDidMount() {
+  bookFind(event) {
+    event.preventDefault()
+    event.stopPropagation()
     const url = this.createURL(
       this.state.search,
       this.state.printType,
@@ -95,7 +99,7 @@ class App extends Component {
               name='this.state.search'
               onChange={event => this.setSearchInput(event.target.value)}
             />
-            <button type='submit' onClick={event => this.componentDidMount(event)}>
+            <button onClick={this.bookFind}>
               Search
             </button>
           </form>
